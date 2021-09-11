@@ -1,0 +1,94 @@
+<div>
+    <h1 style="text-align: center; margin-top: 5px; margin-bottom: -10px;">Espaço do Professor</h1>
+</div>
+
+<hr>
+
+<mat-drawer-container class="example-container" autosize>
+    <mat-drawer #drawer class="example-sidenav" mode="side">
+        <div class="sideBar">
+            <mat-selection-list #materia [multiple]="false">
+                <mat-list-option *ngFor="let materia of selecaoDeMaterias" [value]="materia"
+                    (click)="selecionarMateria(materia)">
+                    {{materia}}
+                </mat-list-option>
+            </mat-selection-list>
+        </div>
+    </mat-drawer>
+
+    <div class="example-sidenav-content">
+        <div class="row">
+            <div class="col-sm-5">
+            <button class="button" type="button" mat-button
+                (click)="drawer.toggle(); trocarNomeEsconderMostrarMaterias()">
+                {{esconderMostrarMaterias}} Máterias
+            </button>
+            </div>
+            <div class="col-sm-5 ">
+            <h2 class="nomeMateria">{{materia.selectedOptions.selected[0]?.value}}</h2>
+            </div>
+        </div>
+    </div>
+
+    <div class="tablestyle">
+        <mat-form-field class="styleFilter" appearance="standard">
+            <mat-label>Filtro:</mat-label>
+            <input style="width: 100px;" matInput (keyup)="applyFilter($event)" #input>
+        </mat-form-field>
+
+        <table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8">
+
+            <!-- Position Column -->
+            <ng-container matColumnDef="nomeAluno">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Nome Aluno </th>
+                <td mat-cell *matCellDef="let element"> {{element.nomeAluno}} </td>
+            </ng-container>
+
+            <!-- Name Column -->
+            <ng-container matColumnDef="tiaAluno">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Tia </th>
+                <td mat-cell *matCellDef="let element"> {{element.tiaAluno}} </td>
+            </ng-container>
+
+            <!-- Nota A -->
+            <ng-container matColumnDef="notaA">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> A </th>
+                <td mat-cell *matCellDef="let element"> {{element.notaA}} </td>
+            </ng-container>
+
+            <!-- Nota B -->
+            <ng-container matColumnDef="notaB">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> B </th>
+                <td mat-cell *matCellDef="let element"> {{element.notaB}} </td>
+            </ng-container>
+
+            <!-- Nota C -->
+            <ng-container matColumnDef="notaC">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> C </th>
+                <td mat-cell *matCellDef="let element"> {{element.notaC}} </td>
+            </ng-container>
+
+            <!-- Nota D -->
+            <ng-container matColumnDef="notaD">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> D </th>
+                <td mat-cell *matCellDef="let element"> {{element.notaD}} </td>
+            </ng-container>
+
+            <!-- Nota Final -->
+            <ng-container matColumnDef="notaFinal">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Nota Final </th>
+                <td mat-cell *matCellDef="let element"> {{element.notaFinal}} </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+            <!-- Row shown when there is no matching data. -->
+            <tr class="mat-row" *matNoDataRow>
+                <td class="mat-cell" colspan="4">Não existem dados correspondentes ao filtro: "{{input.value}}"</td>
+            </tr>
+        </table>
+        <mat-paginator style="background-color:#94A3B5" showFirstLastButtons [pageSizeOptions]="[5, 10, 25, 100]">
+        </mat-paginator>
+    </div>
+</mat-drawer-container>

@@ -1,0 +1,56 @@
+table{
+    width: 100%;
+    background-color:#94A3B5 ;
+}
+.tablestyle{
+    margin: 10px;
+    background-color:#94A3B5 ;
+}
+th.mat-sort-header-sorted {
+    color: black;
+}
+.styleFilter{
+    width: 250px;
+    padding: 0 5px;
+}
+.mat-column-actions {
+    word-wrap: break-word !important;
+    white-space: unset !important;
+    flex: 0 0 15% !important;
+    width: 15% !important;
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+    word-break: break-word;
+    -ms-hyphens: auto;
+    -moz-hyphens: auto;
+    -webkit-hyphens: auto;
+    hyphens: auto;
+}
+
+.button{
+    cursor: pointer !important;
+    background-color: white;
+    font-weight: bold;
+    color: black !important;
+    border: 0 none;
+    border-radius: 5px;
+    padding: 5px !important;
+}
+
+.botaoAceitar{
+    color: green;
+    cursor: pointer;
+
+}
+
+.botaoRecursar{
+    color: red;
+    cursor: pointer;
+}
+
+.notaAceita{
+    background-color: #73e2a7 !important;
+}
+.notaRejeitada{
+    background-color: #c96480 !important;
+}

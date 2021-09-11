@@ -1,0 +1,44 @@
+<nav class="navbar sticky-top navbar-expand-lg navbar-dark bg-dark">
+  <a class="navbar-brand" routerLink="/home">CAMAVI</a>
+
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+    aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item">
+        <a class="nav-link" routerLink="/cursos" routerLinkActive="active">Cursos Professor</a>
+      </li>
+
+      <li class="nav-item">
+        <a class="nav-link" routerLink="/materias" routerLinkActive="active">Materias</a>
+      </li>
+
+      <li class="nav-item">
+        <a class="nav-link" routerLink="/notas/{{usuario}}" routerLinkActive="active">Notas</a>
+      </li>
+    </ul>
+
+    <ul class="nav navbar-nav navbar-right">
+      <li class="nav-item">
+        <button (click)="botaoAluno()" type="button" class="button button-custom">Aluno</button>
+      </li>
+
+      <li class="nav-item">
+        <button (click)="botaoProfessor()" type="button" class="button button-custom">Professor</button>
+      </li>
+
+      <li class="nav-item">
+        <button type="button" class="button">Login</button>
+      </li>
+    </ul>
+
+  </div>
+</nav>
+
+<div>
+  <router-outlet></router-outlet>
+</div>

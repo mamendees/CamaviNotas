@@ -1,0 +1,16 @@
+.button{
+    cursor: pointer !important;
+    background-color: white;
+    font-weight: bold;
+    color: black !important;
+    border: 0 none;
+    border-radius: 5px;
+    cursor: pointer;
+    padding: 5px 20px !important;
+    margin: 5px 5px 5px 0px;
+}
+
+.button-custom:hover,.button-custom:focus {
+    color: white !important;
+    background-color: black;
+}  
