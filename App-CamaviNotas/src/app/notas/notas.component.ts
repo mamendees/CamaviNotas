@@ -2,6 +2,7 @@ import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
+import { NotasService } from '../services/notas.service';
 
 export interface NotasViewModel {
   nomeAluno: string;
@@ -44,9 +45,11 @@ export class NotasComponent implements OnInit, AfterViewInit {
     {nomeMateria: "Empreendedorismo", idMateria: "1", notaAlunos: [{nomeAluno: "Vinicius",  tiaAluno: '31944507', notaA: 1, notaB: 2, notaC: 3, notaD: 4, notaFinal: 10}]},
   ]
   
-  constructor() {}
+  constructor(private notaService: NotasService) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.notaService.getNotas("31933130");
+  }
 
   ngAfterViewInit() {
     this.dataSource.paginator = this.paginator;
