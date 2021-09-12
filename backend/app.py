@@ -76,7 +76,10 @@ def update_notas_by_id():
             return jsonify({"message":f"Update {nota_id} Realizado"})
         elif body:
             collection = db.notas
-            del body['_id']
+            if '_id' in body:
+                del body['_id']
+            if 'materia' in body:
+                del body['materia']
             collection.insert_one(body)
             return jsonify({"message":"Objeto criado"})
         else:
