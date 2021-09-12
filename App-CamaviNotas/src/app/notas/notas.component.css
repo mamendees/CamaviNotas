@@ -15,11 +15,14 @@
 }
 table{
     width: 100%;
-    background-color:#94A3B5 ;
+    background-color: white ;
+    max-width: 1500px;
+    margin-inline: auto;
 }
 .tablestyle{
     margin: 10px;
     background-color:#94A3B5 ;
+    justify-content: center;
 }
 th.mat-sort-header-sorted {
     color: black;
@@ -49,4 +52,11 @@ th.mat-sort-header-sorted {
 .botaoEditar{
     color: black;
     cursor: pointer;
+}
+
+.notaAceita{
+    background-color: #73e2a7 !important;
+}
+.notaRejeitada{
+    background-color: #c96480 !important;
 }

@@ -13,8 +13,11 @@ export class NotasService {
   }
 
   updateNota(notas: any){
-    console.log("notas", notas)
     return this.http.post("http://localhost:5000/notas/updateById", notas);
+  }
+
+  getNotasPorMaterias(idMateria: string){
+    return this.http.post("http://localhost:5000//professores/notasMaterias", {"materiaId": idMateria});
   }
 
 }

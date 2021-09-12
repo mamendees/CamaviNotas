@@ -21,7 +21,7 @@ export interface NotasAlunoViewModel {
   notaC: number;
   notaD: number;
   status: "A" | "R" | "N";
-  testoContestacao?: string;
+  textoContestacao?: string;
   tiaAluno?: string;
   notaFinal: number;
   _id?: any;
@@ -44,6 +44,7 @@ export class NotasAlunoComponent implements OnInit, AfterViewInit {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
   constructor(public dialog: MatDialog, private notaService: NotasService, private formBuilder: FormBuilder) { }
+  tiaAluno!: string;
 
   ngOnInit(): void {
     this.createForm();
@@ -55,16 +56,22 @@ export class NotasAlunoComponent implements OnInit, AfterViewInit {
   }
 
   onSubmit() {
-    let tia = this.formTia.get('tiaAluno')?.value;
-    this.notaService.getNotas(tia).subscribe((retornoApi: any) => {
-      if (JSON.parse(retornoApi) && JSON.parse(retornoApi) as NotasAlunoViewModel) {
-        // console.log("JSON.parse(retornoApi)[0]", JSON.parse(retornoApi)[0])
-        // this.notaService.updateNota(JSON.parse(retornoApi)[0]).subscribe(retornoApi => console.log("aaabc", retornoApi));
-        let notasDoAluno: NotasAlunoViewModel[] = JSON.parse(retornoApi) as NotasAlunoViewModel[];
+    this.tiaAluno = this.formTia.get('tiaAluno')?.value;
+    this.chamarApiNotas();
+  }
 
+  chamarApiNotas(){
+    if(!this.tiaAluno){
+      return;
+    }
+
+    this.notaService.getNotas(this.tiaAluno).subscribe((retornoApi: any) => {
+      if (JSON.parse(retornoApi) && JSON.parse(retornoApi) as NotasAlunoViewModel) {
+        let notasDoAluno: NotasAlunoViewModel[] = JSON.parse(retornoApi) as NotasAlunoViewModel[];
         let retorno: NotasAlunoViewModel[] = notasDoAluno.map(x => {
           x.nomeMateria = x.materia.nomeMateria;
-          x.notaFinal = (x.notaA + x.notaB + x.notaC + x.notaD) / 4;
+          let notaFinal = (x.notaA + x.notaB + x.notaC + x.notaD) / 4;
+          x.notaFinal = notaFinal <= 10 ? notaFinal : 99;
           return x;
         })
         this.popularForm(retorno);
@@ -94,24 +101,28 @@ export class NotasAlunoComponent implements OnInit, AfterViewInit {
     const dialogRef = this.dialog.open(DialogAprovar);
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        let elementoNovo: NotasAlunoViewModel = element;
-        elementoNovo.notaFinal = 0;
-        console.log(elementoNovo)
-        // this.notaService.updateNota(element).subscribe(retornoApi => console.log(retornoApi))
-        //let linha = document.getElementById(element.materia);
-        //linha!.style.backgroundColor = '#73e2a7'
+        element.status = "A";
+        this.notaService.updateNota(element).subscribe(()=> {
+          this.chamarApiNotas();
+        }, err => {
+          console.log(err)
+        })
       }
     });
   }
 
   openDialogRecusar(element: NotasAlunoViewModel) {
     const dialogRef = this.dialog.open(DialogDesAprovar);
-    
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        //let linha = document.getElementById(element.materia);
-        //linha!.style.backgroundColor = '#c96480'
-        console.log(observacaoNota)
+        element.status = "R";
+        element.textoContestacao = observacaoNota;
+        console.log("element", element)
+        this.notaService.updateNota(element).subscribe(()=> {
+          this.chamarApiNotas();
+        }, err => {
+          console.log(err)
+        })
       }
     });
   }

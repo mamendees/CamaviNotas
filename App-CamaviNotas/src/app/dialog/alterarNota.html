@@ -27,6 +27,7 @@
             <mat-form-field style="margin: 0 5px" appearance="outline">
                 <mat-label>Nota A Nova: </mat-label>
                 <input style="color: black !important;" formControlName="notaANova" matInput>
+                <mat-error>Nota deve estar entre 0 e 10!</mat-error>
             </mat-form-field>
         </div>
 
@@ -39,6 +40,7 @@
             <mat-form-field style="margin: 0 5px" appearance="outline">
                 <mat-label>Nota B Nova: </mat-label>
                 <input style="color: black !important;" formControlName="notaBNova" matInput>
+                <mat-error>Nota deve estar entre 0 e 10!</mat-error>
             </mat-form-field>
         </div>
 
@@ -51,6 +53,7 @@
             <mat-form-field style="margin: 0 5px" appearance="outline">
                 <mat-label>Nota C Nova: </mat-label>
                 <input style="color: black !important;" formControlName="notaCNova" matInput>
+                <mat-error>Nota deve estar entre 0 e 10!</mat-error>
             </mat-form-field>
         </div>
 
@@ -63,12 +66,13 @@
             <mat-form-field style="margin: 0 5px" appearance="outline">
                 <mat-label>Nota D Nova: </mat-label>
                 <input style="color: black !important;" formControlName="notaDNova" matInput>
+                <mat-error>Nota deve estar entre 0 e 10!</mat-error>
             </mat-form-field>
         </div>
     </form>
 </mat-dialog-content>
 <mat-dialog-actions align="end">
     <button mat-button mat-dialog-close>Cancelar</button>
-    <button (click)="teste1()" [disabled]="!formAlterarNota.valid" mat-button
-        [mat-dialog-close]="true">Contestar</button>
+    <button (click)="alterarNotas()" [disabled]="!formAlterarNota.valid" [class.disabled]="!formAlterarNota.valid" mat-button
+        [mat-dialog-close]="true">Alterar Notas</button>
 </mat-dialog-actions>

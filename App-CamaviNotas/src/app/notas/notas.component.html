@@ -1,5 +1,19 @@
 <div>
-    <h1 style="text-align: center; margin-top: 5px; margin-bottom: -10px;">Espaço do Professor</h1>
+    <h1 style="text-align: center; margin-top: 5px;">Espaço do Professor</h1>
+</div>
+<div style="background-color: white; margin: 10px; border-radius: 10px; padding: 5px;">
+    <form [formGroup]="formTia" (ngSubmit)="onSubmit()">
+        <mat-form-field appearance="outline">
+            <mat-label>Tia Professor:</mat-label>
+            <input formControlName="tiaProfessor" matInput placeholder="Tia do Professor">
+            <mat-icon matSuffix>sentiment_very_satisfied</mat-icon>
+            <mat-error *ngIf="formTia.invalid">
+                Campo deve conter 8 dígitos!
+            </mat-error>
+        </mat-form-field>
+        <input [disabled]="formTia.invalid" [class.disabled]="formTia.invalid" type="submit"
+            style="margin:5px 0px 20px 10px; " class="btn btn-dark mt-4" value="Chamar Api">
+    </form>
 </div>
 
 <hr>
@@ -8,9 +22,9 @@
     <mat-drawer #drawer class="example-sidenav" mode="side">
         <div class="sideBar">
             <mat-selection-list #materia [multiple]="false">
-                <mat-list-option *ngFor="let materia of selecaoDeMaterias" [value]="materia"
-                    (click)="selecionarMateria(materia)">
-                    {{materia}}
+                <mat-list-option *ngFor="let materia of selecaoDeMaterias" [value]="materia._id"
+                    (click)="selecionarMateria(materia.nomeMateria, materia._id)">
+                    {{materia.nomeMateria}}
                 </mat-list-option>
             </mat-selection-list>
         </div>
@@ -21,7 +35,7 @@
             {{esconderMostrarMaterias}} Máterias
         </button>
         <div>
-            <h2 style="justify-content: center; display: grid;">{{materia.selectedOptions.selected[0]?.value}}</h2>
+            <h2 style="justify-content: center; display: grid;">{{nomeMateriaSelecionada}}</h2>
         </div>
     </div>
 
@@ -47,26 +61,26 @@
 
             <!-- Nota A -->
             <ng-container matColumnDef="notaA">
-                <th mat-header-cell *matHeaderCellDef mat-sort-header> A </th>
-                <td mat-cell *matCellDef="let element"> {{element.notaA}} </td>
+                <th mat-header-cell *matHeaderCellDef> A </th>
+                <td mat-cell *matCellDef="let element"> {{element.nota.notaA}} </td>
             </ng-container>
 
             <!-- Nota B -->
             <ng-container matColumnDef="notaB">
-                <th mat-header-cell *matHeaderCellDef mat-sort-header> B </th>
-                <td mat-cell *matCellDef="let element"> {{element.notaB}} </td>
+                <th mat-header-cell *matHeaderCellDef> B </th>
+                <td mat-cell *matCellDef="let element"> {{element.nota.notaB}} </td>
             </ng-container>
 
             <!-- Nota C -->
             <ng-container matColumnDef="notaC">
-                <th mat-header-cell *matHeaderCellDef mat-sort-header> C </th>
-                <td mat-cell *matCellDef="let element"> {{element.notaC}} </td>
+                <th mat-header-cell *matHeaderCellDef> C </th>
+                <td mat-cell *matCellDef="let element"> {{element.nota.notaC}} </td>
             </ng-container>
 
             <!-- Nota D -->
             <ng-container matColumnDef="notaD">
-                <th mat-header-cell *matHeaderCellDef mat-sort-header> D </th>
-                <td mat-cell *matCellDef="let element"> {{element.notaD}} </td>
+                <th mat-header-cell *matHeaderCellDef> D </th>
+                <td mat-cell *matCellDef="let element"> {{element.nota.notaD}} </td>
             </ng-container>
 
             <!-- Nota Final -->
@@ -82,17 +96,19 @@
                     <mat-icon class="botaoEditar" (click)="openDialogAlteracao(element)">
                         edit
                     </mat-icon>
-                    <p *ngIf="element.status == 'R'">Aguardando Resposta do professor</p>
+                    <p style="display: inline; padding: 5px; margin-bottom: 10px;" *ngIf="element.nota.status == 'R'">
+                        <strong>Contestação do Aluno:</strong> {{element.nota.textoContestacao}}</p>
+                    <mat-icon *ngIf="element.nota.status == 'R'" class="botaoEditar"
+                        (click)="validarContestacaoAluno(element)">
+                        description
+                    </mat-icon>
                 </td>
             </ng-container>
 
             <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+            <tr [ngClass]="{'notaRejeitada': row.nota.status == 'R', 'notaAceita': row.nota.status == 'A'}" mat-row
+                *matRowDef="let row; columns: displayedColumns;"></tr>
 
-            <!-- Row shown when there is no matching data. -->
-            <tr class="mat-row" *matNoDataRow>
-                <td class="mat-cell" colspan="4">Não existem dados correspondentes ao filtro: "{{input.value}}"</td>
-            </tr>
         </table>
         <mat-paginator style="background-color:#94A3B5" showFirstLastButtons [pageSizeOptions]="[5, 10, 25, 100]">
         </mat-paginator>
