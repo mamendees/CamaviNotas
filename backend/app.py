@@ -85,8 +85,10 @@ def professor_materias():
         collection = db.professores
         professor = collection.find_one({"tia":tia_professor})
         materias = find_mongo('materias',{})
-        materias = [mat for mat in materias if professor['_id'] in mat['professores']]
-        return jsonify(json.dumps(materias,default=json_util.default))
+        if professor is not None:
+            materias = [mat for mat in materias if professor['_id'] in mat['professores']]
+            return jsonify(json.dumps(materias,default=json_util.default))
+        return "Not found", 404
     except Exception as ex:
         print(ex)
         return "internal server error", 500
@@ -104,6 +106,7 @@ def notas_materias():
         for aluno in alunos:
             obj = {}
             obj['nomeAluno'] = aluno['nomeAluno']
+            obj['tiaAluno'] = aluno['tiaAluno']
             nota = find_one_mongo('notas',{"tiaAluno":aluno['tiaAluno']})
             obj['nota'] = nota
             response_obj.append(obj)
