@@ -7,6 +7,7 @@ client = pymongo.MongoClient("localhost", 27017)
 db = client.projetoAula
 
 
+
 def find_ids(collection, ids):
     collection = db[collection]
     objs = collection.find()
@@ -35,6 +36,9 @@ def monta_query_mongo_com_or(valores_filtro, campo):
 app = Flask(__name__)
 CORS(app)
 
+@app.route('/')
+def index():
+    return jsonify({'message': 'backend ligado'})
         
 @app.route("/notas/getByTia",  methods=['POST'])
 def get_notas_by_tia():
