@@ -6,20 +6,27 @@ import { MatTableDataSource } from '@angular/material/table';
 
 let observacaoNota: string = "";
 
+export interface MateriaViewModel {
+  nomeMateria: string;
+  professores: string[];
+  turma: string;
+  _id: any;
+}
 export interface NotasAlunoViewModel {
-  materia: string;
+  materia: MateriaViewModel;
+  nomeMateria?: string;
+  materiaId?: string
   notaA: number;
   notaB: number;
   notaC: number;
   notaD: number;
+  status: "A" | "R" | "N";
+  testoContestacao?: string;
+  tiaAluno?: string;
   notaFinal: number;
-  status: "A" | "R" | "N"
+  _id?: any;
 }
-const ELEMENT_DATA: NotasAlunoViewModel[] = [
-  { materia: "Etica", notaA: 1, notaB: 2, notaC: 3, notaD: 4, notaFinal: 10, status: "N" },
-  { materia: "Calculo1", notaA: 5, notaB: 6, notaC: 7, notaD: 8, notaFinal: 10, status: "A" },
-  { materia: "Empreendedorismo", notaA: 5, notaB: 6, notaC: 7, notaD: 8, notaFinal: 10, status: "R" },
-];
+
 
 
 @Component({
@@ -28,15 +35,50 @@ const ELEMENT_DATA: NotasAlunoViewModel[] = [
   styleUrls: ['./notas-aluno.component.css']
 })
 export class NotasAlunoComponent implements OnInit, AfterViewInit {
-  displayedColumns: string[] = ['materia', 'notaA', 'notaB', 'notaC', 'notaD', 'notaFinal', 'actions'];
-  dataSource = new MatTableDataSource(ELEMENT_DATA);
+  displayedColumns: string[] = ['nomeMateria', 'notaA', 'notaB', 'notaC', 'notaD', 'notaFinal', 'actions'];
+  dadoInicialVazio: NotasAlunoViewModel[] = [];
+  dataSource = new MatTableDataSource(this.dadoInicialVazio);
+  formTia!: FormGroup;
 
   @ViewChild(MatSort) public sort!: MatSort;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
-  constructor(public dialog: MatDialog) { }
+  constructor(public dialog: MatDialog, private notaService: NotasService, private formBuilder: FormBuilder) { }
 
-  ngOnInit(): void { }
+  ngOnInit(): void {
+    this.createForm();
+  }
+  createForm() {
+    this.formTia = this.formBuilder.group({
+      tiaAluno: ["", Validators.compose([Validators.required, Validators.pattern("[0-9]{8}")])]
+    })
+  }
+
+  onSubmit() {
+    let tia = this.formTia.get('tiaAluno')?.value;
+    this.notaService.getNotas(tia).subscribe((retornoApi: any) => {
+      if (JSON.parse(retornoApi) && JSON.parse(retornoApi) as NotasAlunoViewModel) {
+        // console.log("JSON.parse(retornoApi)[0]", JSON.parse(retornoApi)[0])
+        // this.notaService.updateNota(JSON.parse(retornoApi)[0]).subscribe(retornoApi => console.log("aaabc", retornoApi));
+        let notasDoAluno: NotasAlunoViewModel[] = JSON.parse(retornoApi) as NotasAlunoViewModel[];
+
+        let retorno: NotasAlunoViewModel[] = notasDoAluno.map(x => {
+          x.nomeMateria = x.materia.nomeMateria;
+          x.notaFinal = (x.notaA + x.notaB + x.notaC + x.notaD) / 4;
+          return x;
+        })
+        this.popularForm(retorno);
+      }
+    }, (err: any) => {
+      console.log(err)
+    });
+  }
+
+  popularForm(entrada: NotasAlunoViewModel[]) {
+    this.dataSource = new MatTableDataSource(entrada);
+    this.dataSource.paginator = this.paginator;
+    this.dataSource.sort = this.sort;
+  }
 
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
@@ -48,23 +90,27 @@ export class NotasAlunoComponent implements OnInit, AfterViewInit {
     this.dataSource.sort = this.sort;
   }
 
-
   openDialogAceitar(element: NotasAlunoViewModel) {
     const dialogRef = this.dialog.open(DialogAprovar);
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        let linha = document.getElementById(element.materia);
-        linha!.style.backgroundColor = '#73e2a7'
+        let elementoNovo: NotasAlunoViewModel = element;
+        elementoNovo.notaFinal = 0;
+        console.log(elementoNovo)
+        // this.notaService.updateNota(element).subscribe(retornoApi => console.log(retornoApi))
+        //let linha = document.getElementById(element.materia);
+        //linha!.style.backgroundColor = '#73e2a7'
       }
     });
   }
 
   openDialogRecusar(element: NotasAlunoViewModel) {
     const dialogRef = this.dialog.open(DialogDesAprovar);
+    
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        let linha = document.getElementById(element.materia);
-        linha!.style.backgroundColor = '#c96480'
+        //let linha = document.getElementById(element.materia);
+        //linha!.style.backgroundColor = '#c96480'
         console.log(observacaoNota)
       }
     });
@@ -80,6 +126,7 @@ export class DialogAprovar { }
 
 
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { NotasService } from '../services/notas.service';
 @Component({
   selector: 'dialog-desaprovar',
   templateUrl: '../../app/dialog/dialogDesaprovar.html',
@@ -92,7 +139,7 @@ export class DialogDesAprovar implements OnInit {
   ngOnInit(): void {
     this.createForm();
   }
-  teste1(){
+  teste1() {
     observacaoNota = this.formCliente.get('observacao')!.value;
   }
 

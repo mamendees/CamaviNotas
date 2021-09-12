@@ -43,7 +43,7 @@ th.mat-sort-header-sorted {
 
 }
 
-.botaoRecursar{
+.botaoRecusar{
     color: red;
     cursor: pointer;
 }
@@ -53,4 +53,8 @@ th.mat-sort-header-sorted {
 }
 .notaRejeitada{
     background-color: #c96480 !important;
+}
+
+.disabled{
+    cursor: not-allowed;
 }

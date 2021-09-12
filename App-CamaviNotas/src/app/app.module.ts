@@ -3,7 +3,7 @@ import { BrowserModule } from '@angular/platform-browser';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { NotasComponent } from './notas/notas.component';
+import { DialogAlterarNota, NotasComponent } from './notas/notas.component';
 import { CursosComponent } from './cursos/cursos.component';
 import { MateriasComponent } from './materias/materias.component';
 import { HomeComponent } from './home/home.component';
@@ -34,7 +34,8 @@ import { HttpClientModule } from '@angular/common/http';
     PageNotFoundComponent,
     NotasAlunoComponent,
     DialogAprovar,
-    DialogDesAprovar
+    DialogDesAprovar,
+    DialogAlterarNota
   ],
   imports: [
     BrowserModule,

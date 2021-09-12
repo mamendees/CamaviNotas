@@ -45,3 +45,8 @@ th.mat-sort-header-sorted {
 .sideBar{
     min-width: 200px;
 }
+
+.botaoEditar{
+    color: black;
+    cursor: pointer;
+}

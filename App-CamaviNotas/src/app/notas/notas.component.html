@@ -17,16 +17,11 @@
     </mat-drawer>
 
     <div class="example-sidenav-content">
-        <div class="row">
-            <div class="col-sm-5">
-            <button class="button" type="button" mat-button
-                (click)="drawer.toggle(); trocarNomeEsconderMostrarMaterias()">
-                {{esconderMostrarMaterias}} Máterias
-            </button>
-            </div>
-            <div class="col-sm-5 ">
-            <h2 class="nomeMateria">{{materia.selectedOptions.selected[0]?.value}}</h2>
-            </div>
+        <button class="button" type="button" mat-button (click)="drawer.toggle(); trocarNomeEsconderMostrarMaterias()">
+            {{esconderMostrarMaterias}} Máterias
+        </button>
+        <div>
+            <h2 style="justify-content: center; display: grid;">{{materia.selectedOptions.selected[0]?.value}}</h2>
         </div>
     </div>
 
@@ -78,6 +73,17 @@
             <ng-container matColumnDef="notaFinal">
                 <th mat-header-cell *matHeaderCellDef mat-sort-header> Nota Final </th>
                 <td mat-cell *matCellDef="let element"> {{element.notaFinal}} </td>
+            </ng-container>
+
+            <!-- Actions -->
+            <ng-container matColumnDef="actions" stickyEnd>
+                <th mat-header-cell *matHeaderCellDef> </th>
+                <td mat-cell *matCellDef="let element">
+                    <mat-icon class="botaoEditar" (click)="openDialogAlteracao(element)">
+                        edit
+                    </mat-icon>
+                    <p *ngIf="element.status == 'R'">Aguardando Resposta do professor</p>
+                </td>
             </ng-container>
 
             <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>

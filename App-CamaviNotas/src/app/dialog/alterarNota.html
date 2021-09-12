@@ -1,0 +1,74 @@
+<h2 mat-dialog-title>Deseja mesmo Contestar a nota?</h2>
+<mat-dialog-content class="mat-typography">
+    <!-- <mat-form-field appearance="outline">
+        <mat-label>Contestação</mat-label>
+        <input matInput>
+        <mat-hint>Descreva sua contestação</mat-hint>
+    </mat-form-field> -->
+    <form [formGroup]="formAlterarNota">
+        <!-- Primeira Linha -->
+        <div>
+            <mat-form-field style="margin: 0 5px" appearance="fill">
+                <mat-label>Nome Aluno:</mat-label>
+                <input style="color: black !important;" formControlName="nomeAluno" matInput>
+            </mat-form-field>
+            <mat-form-field style="margin: 0 5px" appearance="fill">
+                <mat-label>Tia Aluno: </mat-label>
+                <input style="color: black !important;" formControlName="tiaAluno" matInput>
+            </mat-form-field>
+        </div>
+
+        <!-- Segunda Linha -->
+        <div>
+            <mat-form-field style="margin: 0 5px" appearance="fill">
+                <mat-label>Nota A Antiga:</mat-label>
+                <input style="color: black !important;" formControlName="notaAAntiga" matInput>
+            </mat-form-field>
+            <mat-form-field style="margin: 0 5px" appearance="outline">
+                <mat-label>Nota A Nova: </mat-label>
+                <input style="color: black !important;" formControlName="notaANova" matInput>
+            </mat-form-field>
+        </div>
+
+        <!-- Terceira Linha -->
+        <div>
+            <mat-form-field style="margin: 0 5px" appearance="fill">
+                <mat-label>Nota B Antiga:</mat-label>
+                <input style="color: black !important;" formControlName="notaBAntiga" matInput>
+            </mat-form-field>
+            <mat-form-field style="margin: 0 5px" appearance="outline">
+                <mat-label>Nota B Nova: </mat-label>
+                <input style="color: black !important;" formControlName="notaBNova" matInput>
+            </mat-form-field>
+        </div>
+
+        <!-- Quarta Linha -->
+        <div>
+            <mat-form-field style="margin: 0 5px" appearance="fill">
+                <mat-label>Nota C Antiga:</mat-label>
+                <input style="color: black !important;" formControlName="notaCAntiga" matInput>
+            </mat-form-field>
+            <mat-form-field style="margin: 0 5px" appearance="outline">
+                <mat-label>Nota C Nova: </mat-label>
+                <input style="color: black !important;" formControlName="notaCNova" matInput>
+            </mat-form-field>
+        </div>
+
+        <!-- Quinta Linha -->
+        <div>
+            <mat-form-field style="margin: 0 5px" appearance="fill">
+                <mat-label>Nota D Antiga:</mat-label>
+                <input style="color: black !important;" formControlName="notaDAntiga" matInput>
+            </mat-form-field>
+            <mat-form-field style="margin: 0 5px" appearance="outline">
+                <mat-label>Nota D Nova: </mat-label>
+                <input style="color: black !important;" formControlName="notaDNova" matInput>
+            </mat-form-field>
+        </div>
+    </form>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+    <button mat-button mat-dialog-close>Cancelar</button>
+    <button (click)="teste1()" [disabled]="!formAlterarNota.valid" mat-button
+        [mat-dialog-close]="true">Contestar</button>
+</mat-dialog-actions>

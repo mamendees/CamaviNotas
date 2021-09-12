@@ -8,17 +8,13 @@ export class NotasService {
 
   constructor(private http: HttpClient) { }
 
-  getNotas(tia: String){
-    this.http.post("http://localhost:5000/notas/getByTia",{"tiaAluno":tia}).subscribe((data: any) =>{
-      console.table(JSON.parse(data));
-      return data
-    })
+  getNotas(tia: String): any{
+    return this.http.post("http://localhost:5000/notas/getByTia", {"tiaAluno":tia});
   }
 
-  updateNota(notas:any){
-    this.http.post("http://localhost:5000/notas/updateById",notas).subscribe((data: any) =>{
-      console.log(data);
-    })
+  updateNota(notas: any){
+    console.log("notas", notas)
+    return this.http.post("http://localhost:5000/notas/updateById", notas);
   }
 
 }
