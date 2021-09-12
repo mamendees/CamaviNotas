@@ -108,7 +108,16 @@ def notas_materias():
             obj['nomeAluno'] = aluno['nomeAluno']
             obj['tiaAluno'] = aluno['tiaAluno']
             nota = find_one_mongo('notas',{"tiaAluno":aluno['tiaAluno']})
-            obj['nota'] = nota
+            if nota is not None:  
+                obj['nota'] = nota
+            else:
+                nota = {}
+                nota['notaA'] = 99
+                nota['notaB'] = 99
+                nota['notaC'] = 99
+                nota['notaD'] = 99
+                nota['status'] = "N"
+                obj['nota'] = nota  
             response_obj.append(obj)
 
         return jsonify(json.dumps(response_obj, default=json_util.default))
