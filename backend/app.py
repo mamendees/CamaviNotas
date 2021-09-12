@@ -67,12 +67,19 @@ def update_notas_by_id():
     """
     try:
         body = json.loads(request.data)
-        nota_id = body['_id']['$oid']
-        del body['_id']
-        del body['materia']
-        collection = db.notas
-        collection.update_one({"_id":ObjectId(nota_id)},{"$set":body})
-        return jsonify({"message":f"Update {nota_id} Realizado"})
+        if '_id' in body and '$oid' in body['id']:
+            nota_id = body['_id']['$oid']
+            del body['_id']
+            del body['materia']
+            collection = db.notas
+            collection.update_one({"_id":ObjectId(nota_id)},{"$set":body})
+            return jsonify({"message":f"Update {nota_id} Realizado"})
+        elif body:
+            collection = db.notas
+            collection.insert_one(body)
+            return jsonify({"message:" f"Objeto criado"})
+        else:
+            return jsonify({"message":f"Sem Body"})
     except Exception as ex:
         print(ex)
         return "internal server error", 500
