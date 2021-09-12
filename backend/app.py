@@ -25,6 +25,13 @@ def find_one_mongo(collection, query):
     obj = collection.find_one(query)
     return obj
 
+def monta_query_mongo_com_or(valores_filtro, campo):
+    array_or = []
+    for val in valores_filtro:
+        array_or.append({campo:val})
+    query = {"$or":array_or}
+    return query
+
 app = Flask(__name__)
 CORS(app)
 
@@ -60,10 +67,48 @@ def update_notas_by_id():
     """
     try:
         body = json.loads(request.data)
-        nota_id = body['id']
+        nota_id = body['_id']['$oid']
+        del body['_id']
+        del body['materia']
         collection = db.notas
-        collection.update_one({"id":nota_id},{body})
+        collection.update_one({"_id":ObjectId(nota_id)},{"$set":body})
         return jsonify({"message":f"Update {nota_id} Realizado"})
+    except Exception as ex:
+        print(ex)
+        return "internal server error", 500
+
+@app.route("/professores/materias",  methods=['POST'])
+def professor_materias():
+    try:
+        body = json.loads(request.data)
+        tia_professor = body['tiaProfessor']
+        collection = db.professores
+        professor = collection.find_one({"tia":tia_professor})
+        materias = find_mongo('materias',{})
+        materias = [mat for mat in materias if professor['_id'] in mat['professores']]
+        return jsonify(json.dumps(materias,default=json_util.default))
+    except Exception as ex:
+        print(ex)
+        return "internal server error", 500
+
+
+
+@app.route("/professores/notasMaterias",  methods=['POST'])
+def notas_materias():
+    try:
+        body = json.loads(request.data)
+        id_materia = ObjectId(body['materiaId'])
+        alunos = find_mongo('alunos',{})
+        alunos = [aluno for aluno in alunos if id_materia in aluno['materias']]
+        response_obj = []
+        for aluno in alunos:
+            obj = {}
+            obj['nomeAluno'] = aluno['nomeAluno']
+            nota = find_one_mongo('notas',{"tiaAluno":aluno['tiaAluno']})
+            obj['nota'] = nota
+            response_obj.append(obj)
+
+        return jsonify(json.dumps(response_obj, default=json_util.default))
     except Exception as ex:
         print(ex)
         return "internal server error", 500
@@ -172,7 +217,7 @@ def get_usuario_by_id():
     return jsonify(json.dumps(usuario, default=json_util.default))
 
 @app.route("/usuario/deleteById",  methods=['DELETE'])
-def delete_curso_by_id():
+def delete_usuario_by_id():
     """
     Retorna o curso através do id 
     """
